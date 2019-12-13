@@ -26,65 +26,74 @@
       <div class="d-flex">
         <!-- Card #1 -->
         <div class="card" style="width: 18rem;">
-          <img src="/images/normal.jpg" class="card-img-top">
+          <img id="card1Img" src="/images/normal.jpg" class="card-img-top">
           <div class="card-body text-center">
-            <h5 class="card-title">Day</h5>
-            <p class="card-text">Description</p>
-            <p class="card-text">Temp</p>
+            <h5 id="card1Day" class="card-title">Day</h5>
+            <p id="card1Desc" class="card-text">Description</p>
+            <p id="card1Temp" class="card-text">Temp</p>
           </div>
         </div>
         <!-- Card #2 -->
         <div class="card" style="width: 18rem;">
-          <img src="/images/normal.jpg" class="card-img-top">
+          <img id="card2Img" src="/images/normal.jpg" class="card-img-top">
           <div class="card-body text-center">
-            <h5 class="card-title">Day</h5>
-            <p class="card-text">Description</p>
-            <p class="card-text">Temp</p>
+            <h5 id="card2Day" class="card-title">Day</h5>
+            <p id="card2Desc" class="card-text">Description</p>
+            <p id="card2Temp" class="card-text">Temp</p>
           </div>
         </div>
         <!-- Card #3 -->
         <div class="card" style="width: 18rem;">
-          <img src="/images/normal.jpg" class="card-img-top">
+          <img id="card3Img" src="/images/normal.jpg" class="card-img-top">
           <div class="card-body text-center">
-            <h5 class="card-title">Day</h5>
-            <p class="card-text">Description</p>
-            <p class="card-text">Temp</p>
+            <h5 id="card3Day" class="card-title">Day</h5>
+            <p id="card3Desc" class="card-text">Description</p>
+            <p id="card3Temp" class="card-text">Temp</p>
           </div>
         </div>
         <!-- Card #4 -->
         <div class="card" style="width: 18rem;">
-          <img src="/images/normal.jpg" class="card-img-top">
+          <img id="card4Img" src="/images/normal.jpg" class="card-img-top">
           <div class="card-body text-center">
-            <h5 class="card-title">Day</h5>
-            <p class="card-text">Description</p>
-            <p class="card-text">Temp</p>
+            <h5 id="card4Day" class="card-title">Day</h5>
+            <p id="card4Desc" class="card-text">Description</p>
+            <p id="card4Temp" class="card-text">Temp</p>
           </div>
         </div>
         <!-- Card #5 -->
         <div class="card" style="width: 18rem;">
-          <img src="/images/normal.jpg" class="card-img-top">
+          <img id="card5Img" src="/images/normal.jpg" class="card-img-top">
           <div class="card-body text-center">
-            <h5 class="card-title">Day</h5>
-            <p class="card-text">Description</p>
-            <p class="card-text">Temp</p>
+            <h5 id="card5Day" class="card-title">Day</h5>
+            <p id="card5Desc" class="card-text">Description</p>
+            <p id="card5Temp" class="card-text">Temp</p>
           </div>
         </div>
       </div>
       <div class="mt-5 text-center">
-        <h1>City, State</h1>
+        <h1 id="cityHeader">City, State</h1>
       </div>
       <div class="mt-5">
         <div class="d-flex justify-content-around">
           <input id="cityInput" placeholder="City, State" type="text">
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Dropdown button
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a id="weatherDropDown" class="dropdown-item">Current Weather</a>
+              <a id="forecastDropDown" class="dropdown-item">Five Day Forecast</a>
+            </div>
+          </div>
           <div>
             <button class="btn btn-success">Add Location</button>
             <button class="btn btn-danger">Delete Location</button>
-            <button class="btn btn-primary">Previous</button>
-            <button class="btn btn-primary">Next</button>
+            <button id="prevBtn" class="btn btn-primary">Previous</button>
+            <button id="nextBtn" class="btn btn-primary">Next</button>
           </div>
         </div>
       </div>
-      <div id="divtainer" class="mt-5 justify-content-center">
+      <div id="divtainer">
 
       </div>
     </div>
