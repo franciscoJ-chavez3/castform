@@ -58,7 +58,7 @@ let url_forecast = "https://api.openweathermap.org/data/2.5/forecast?q=";
 
 //check for data
 if (localStorage.getItem('dataKey')) {
-    console.log('localStorage exists and has been loaded');
+    console.log('localStorage exists and has been loaded - current weather');
     //push into data
     data = JSON.parse(localStorage.getItem('dataKey'));
     //console log
@@ -74,7 +74,7 @@ if (localStorage.getItem('dataKey')) {
 //check for castdata
 if (localStorage.getItem('castKey')) {
     //console log confirmation
-    console.log('localStorage exists and has been loaded');
+    console.log('localStorage exists and has been loaded - forecast');
     //push into castdata
     castdata = JSON.parse(localStorage.getItem('castKey'));
     //console log
@@ -101,52 +101,58 @@ forecastDropDown.addEventListener('click', e => {
 
 //create click events for buttons
 prevBtn.addEventListener('click', () => {
-    //determine drop
-    let test = determineDrop();
-    console.log(test);
-    if (test === true) {
-        //decrement weather counter within range
-        if (wIndex > 0) {
+    //determine current weather OR forecast
+    if (dropdownMenuBtn.innerText === weatherDropDown.innerText){
+        //perform action for weather
+        if(wIndex > 0 && wIndex != 1){
+            //decrement initial population
             wIndex--;
+            //decrement to desired position
+            wIndex--;
+            //populate
+            populateCard();
+            //console log
+            console.log('wIndex: ' + wIndex);
         } else {
             alert('Cannot decrement further');
         }
-        //populate
-        populateCard();
-    } else {
-        //decrement forecast counter
-        if (fIndex > 0) {
+    } else if (dropdownMenuBtn.innerText === forecastDropDown.innerText) {
+        //perform action for forecast
+        if(fIndex > 0 && fIndex != 1){
+            //decrement initial population
             fIndex--;
+            //decrement to desired position
+            fIndex--;
+            //populate
+            populateCards();
+            //console log
+            console.log('fIndex: ' + fIndex);
         } else {
             alert('Cannot decrement further');
         }
-        //populate
-        populateCards();
     }
+    
 });
 
 nextBtn.addEventListener('click', () => {
-    //determine drop
-    let test = determineDrop();
-    if (test === true) {
-        //increment weather counter within range
-        if (wIndex < data.length - 1) {
-            wIndex++;
+    if(dropdownMenuBtn.innerText === weatherDropDown.innerText){
+        //perform action for weather
+        if(wIndex <= data.length-1){
+            populateCard();
+            console.log('wIndex: ' + wIndex);
         } else {
             alert('Cannot increment further');
         }
-        //populate
-        populateCard();
-    } else {
-        //increment forecast counter
-        if (fIndex < castdata.length - 1) {
-            fIndex++;
+    } else if(dropdownMenuBtn.innerText === forecastDropDown.innerText){
+        //perform action for forecast
+        if(fIndex <= data.length-1){
+            populateCards();
+            console.log('fIndex: ' + fIndex);
         } else {
             alert('Cannot increment further');
         }
-        //populate
-        populateCards();
     }
+    
 });
 
 //create keypress event to grab input
@@ -164,13 +170,13 @@ function determineDrop() {
     let drop;
     if (dropdownMenuBtn.innerText === weatherDropDown.innerText) {
         //set full url in event of current weather
-        url_city_pt2 = cityInput.value + ",us";
+        url_city_pt2 = cityInput.value;
         fullURL = url_pt1 + url_city_pt2 + url_temp_pt3 + url_key_pt4;
         drop = true;
         return drop;
     } else if (dropdownMenuBtn.innerText === forecastDropDown.innerText) {
         //set full url in event of forecast
-        url_city_pt2 = cityInput.value + ",us";
+        url_city_pt2 = cityInput.value;
         fullURL = url_forecast + url_city_pt2 + url_temp_pt3 + url_key_pt4;
         drop = false;
         return drop;
@@ -229,23 +235,23 @@ function getForecast(info) {
     let fiveDayCast = {
         cityName: info.city.name,
         //card 1
-        date1: info.list[4].dt_txt,
+        date1: info.list[4].dt_txt.substring(0, 10),
         desc1: info.list[4].weather[0].description,
         temp1: info.list[4].main.temp,
         //card 2
-        date2: info.list[12].dt_txt,
+        date2: info.list[12].dt_txt.substring(0, 10),
         desc2: info.list[12].weather[0].description,
         temp2: info.list[12].main.temp,
         //card 3
-        date3: info.list[20].dt_txt,
+        date3: info.list[20].dt_txt.substring(0, 10),
         desc3: info.list[20].weather[0].description,
         temp3: info.list[20].main.temp,
         //card 4
-        date4: info.list[28].dt_txt,
+        date4: info.list[28].dt_txt.substring(0, 10),
         desc4: info.list[28].weather[0].description,
         temp4: info.list[28].main.temp,
         //card 5
-        date5: info.list[36].dt_txt,
+        date5: info.list[36].dt_txt.substring(0, 10),
         desc5: info.list[36].weather[0].description,
         temp5: info.list[36].main.temp
     };
@@ -279,10 +285,6 @@ function populateCard() {
     popCard.setAttribute('class', 'card');
     popCard.setAttribute('style', 'width:14rem;');
     popImg.setAttribute('class', 'card-img-top');
-
-    //check castform
-    popImg.setAttribute('src', '/images/normal.jpg');
-
     popBody.setAttribute('class', 'card-body text-center');
     popTitle.setAttribute('class', 'card-title');
     popText1.setAttribute('class', 'card-text');
@@ -293,6 +295,10 @@ function populateCard() {
     popTitle.innerText = data[wIndex].cityName;
     popText1.innerText = data[wIndex].cityWeather;
     popText2.innerText = Math.round(data[wIndex].cityTemp) + String.fromCharCode(176) + "F";
+
+    //set castform
+    let transform = getCastform(popText1.innerText);
+    popImg.setAttribute('src', transform);
 
     //increment
     wIndex++;
@@ -318,26 +324,44 @@ function populateCards() {
     card1Day.innerText = castdata[fIndex].date1;
     card1Desc.innerText = castdata[fIndex].desc1;
     card1Temp.innerText = Math.round(castdata[fIndex].temp1) + String.fromCharCode(176) + "F";
+    card1Img.src = getCastform(card1Desc.innerText);
     //card2
     card2Day.innerText = castdata[fIndex].date2;
     card2Desc.innerText = castdata[fIndex].desc2;
     card2Temp.innerText = Math.round(castdata[fIndex].temp2) + String.fromCharCode(176) + "F";
+    card2Img.src = getCastform(card2Desc.innerText);
     //card3
     card3Day.innerText = castdata[fIndex].date3;
     card3Desc.innerText = castdata[fIndex].desc3;
     card3Temp.innerText = Math.round(castdata[fIndex].temp3) + String.fromCharCode(176) + "F";
+    card3Img.src = getCastform(card3Desc.innerText);
     //card4
     card4Day.innerText = castdata[fIndex].date4;
     card4Desc.innerText = castdata[fIndex].desc4;
     card4Temp.innerText = Math.round(castdata[fIndex].temp4) + String.fromCharCode(176) + "F";
+    card4Img.src = getCastform(card4Desc.innerText);
     //card5
     card5Day.innerText = castdata[fIndex].date5;
     card5Desc.innerText = castdata[fIndex].desc5;
     card5Temp.innerText = Math.round(castdata[fIndex].temp5) + String.fromCharCode(176) + "F";
+    card5Img.src = getCastform(card5Desc.innerText);
 
     //increment
     fIndex++;
 
+}
+
+function getCastform(desc){
+    //return correct path matching desc
+    if(desc.includes('clear')){
+        return "/images/sun.png";
+    } else if(desc.includes('rain')){
+        return "/images/rain.jpg";
+    } else if(desc.includes('cloud')){
+        return "/images/snow.jpg";
+    } else {
+        return "/images/normal.jpg";
+    }
 }
 
 //save functions
@@ -347,11 +371,11 @@ function saveData() {
 }
 
 function saveCast() {
-    localStorage.setItem('castKey', JSON.stringify(data));
+    localStorage.setItem('castKey', JSON.stringify(castdata));
     console.log(castdata);
 }
 
-//delete function
+//delete functions
 function eliminate(her) {
     while (her.firstChild) {
         her.removeChild(her.firstChild);
