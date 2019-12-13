@@ -36,10 +36,12 @@ let card5Temp = document.getElementById('card5Temp');
 let cityHeader = document.getElementById('cityHeader');
 let prevBtn = document.getElementById('prevBtn');
 let nextBtn = document.getElementById('nextBtn');
+let deleteBtn = document.getElementById('deleteBtn');
 
 let dropdownMenuBtn = document.getElementById('dropdownMenuButton');
 let weatherDropDown = document.getElementById('weatherDropDown');
 let forecastDropDown = document.getElementById('forecastDropDown');
+
 
 //create counter for current weather
 wIndex = 0;
@@ -89,12 +91,12 @@ if (localStorage.getItem('castKey')) {
 }
 
 //create event listeners for dropdown items
-weatherDropDown.addEventListener('click', e => {
+weatherDropDown.addEventListener('click', () => {
     //set innertext of drop down menu
     dropdownMenuBtn.innerText = weatherDropDown.innerText;
 });
 
-forecastDropDown.addEventListener('click', e => {
+forecastDropDown.addEventListener('click', () => {
     //set innerText of drop down menu
     dropdownMenuBtn.innerText = forecastDropDown.innerText;
 });
@@ -145,14 +147,58 @@ nextBtn.addEventListener('click', () => {
         }
     } else if(dropdownMenuBtn.innerText === forecastDropDown.innerText){
         //perform action for forecast
-        if(fIndex <= data.length-1){
+        if(fIndex <= castdata.length-1){
             populateCards();
             console.log('fIndex: ' + fIndex);
         } else {
             alert('Cannot increment further');
+            console.log('fIndex: ' + fIndex);
         }
     }
     
+});
+
+deleteBtn.addEventListener('click', () => {
+    //create action for current weather
+    if(dropdownMenuBtn.innerText === weatherDropDown.innerText){
+        //remove object in data
+        data.splice(wIndex-1, 1);
+        console.log(data);
+        //save update to data
+        saveData();
+        console.log(data);
+        //decrement
+        wIndex--;
+        //repopulate
+        if(wIndex < data.length-1){
+            populateCard();
+        } else {
+            eliminate(divtainer);
+        }
+    } else if(dropdownMenuBtn.innerText === forecastDropDown.innerText){
+        //create action for forecast
+        //remove object in castdata
+        castdata.splice(fIndex-1, 1);
+        console.log(castdata);
+        //save update to castdata
+        saveCast();
+        console.log(castdata);
+        //removeItem if cast data is empty
+        if(castdata.length <= 0){
+            localStorage.removeItem('castKey');
+        }
+        //decrement
+        fIndex--;
+        //repopulate
+        if(castdata.length > 0){
+            fIndex = castdata.length-1;
+            populateCards();
+        } else {
+            populateDefault();
+            //reset index
+            fIndex = 0;
+        }
+    }
 });
 
 //create keypress event to grab input
@@ -349,6 +395,38 @@ function populateCards() {
     //increment
     fIndex++;
 
+}
+
+function populateDefault(){
+        //set innerText of Cards
+
+    //heading
+    cityHeader.innerText = 'City Name';
+    //card1
+    card1Day.innerText = 'Day';
+    card1Desc.innerText = 'Description';
+    card1Temp.innerText = 'Temp';
+    card1Img.src = '/images/normal.jpg';
+    //card2
+    card2Day.innerText = 'Day';
+    card2Desc.innerText = 'Description';
+    card2Temp.innerText = 'Temp';
+    card2Img.src = '/images/normal.jpg';
+    //card3
+    card3Day.innerText = 'Day';
+    card3Desc.innerText = 'Description';
+    card3Temp.innerText = 'Temp';
+    card3Img.src = '/images/normal.jpg';
+    //card4
+    card4Day.innerText = 'Day';
+    card4Desc.innerText = 'Description';
+    card4Temp.innerText = 'Temp';
+    card4Img.src = '/images/normal.jpg';
+    //card5
+    card5Day.innerText = 'Day';
+    card5Desc.innerText = 'Description';
+    card5Temp.innerText = 'Temp';
+    card5Img.src = '/images/normal.jpg';
 }
 
 function getCastform(desc){
